@@ -1,0 +1,46 @@
+:root {
+  /* Основные оранжевые цвета */
+  --orange-primary: #ff6b35;
+  --orange-secondary: #ff8c42;
+  --orange-light: #ffb48f;
+  --orange-dark: #e55a2b;
+  
+  /* Фон и текст */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-tertiary: #f1f3f4;
+  
+  --text-primary: #000000;
+  --text-secondary: #5f6368;
+  --text-inverse: #ffffff;
+  
+  /* Состояния и функциональные цвета */
+  --success: #34a853;
+  --error: #ea4335;
+  --warning: #f9ab00;
+  --info: #4285f4;
+  
+  /* Границы и разделители */
+  --border-color: #dadce0;
+  --border-light: #e8eaed;
+  --border-orange: #ffa270;
+  
+  /* Тени */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-orange: 0 2px 8px rgba(255, 107, 53, 0.3);
+  
+  /* Градиенты */
+  --gradient-orange: linear-gradient(135deg, var(--orange-primary), var(--orange-secondary));
+  --gradient-light: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+}
+
+.vertical-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.horizontal-container {
+    display: flex;
+    flex-direction: row;
+}
