@@ -8,12 +8,21 @@
         {#if type == "text"}
             <p class="message-content">{data}</p>
         {:else if (type == "link")}
-            <a href={data.link}>{data.title} {data.distance}</a>
+            <a href={data.link}>{data.title} </a>
+            <p>Distance: {data.distance}</p>
         {/if}
     </div>
 </div>
 
 <style>
+    a {
+        color: var(--text-inverse)
+    }
+
+    a:visited {
+        color: var(--text-inverse)
+    }
+
     .message {
         display: flex;
         margin: 8px 0;

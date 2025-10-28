@@ -5,7 +5,7 @@ import Api from "../data/Api.js"
 class ChatState {
     #api = new Api()
 
-    messages = $state([])
+    messages = $state([{ type: "link", sender: "bot", data: {title: "Arxiv", link: "https://arxiv.org/", distance: 0.2345872} }])
 
     input = $state("")
     model_name = $state(ModelName.Nomic)
@@ -16,9 +16,12 @@ class ChatState {
         console.log($state.snapshot(this.messages))
         this.messages.push({ type: "text", sender: "user", data: this.input })
 
+        const curInput = this.input
+        this.input = ""
+
         try {
             const results = await this.#api.send({
-                input: this.input,
+                input: curInput,
                 model_name: this.model_name,
                 metric: this.metric,
                 length: this.length
