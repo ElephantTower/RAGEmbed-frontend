@@ -15,7 +15,7 @@ export default class Api {
 
         if (!response.ok) {
             throw new Error(
-                `HTTP error! status: ${response.status}`
+                `${JSON.stringify(response)} `
             );
         }
 

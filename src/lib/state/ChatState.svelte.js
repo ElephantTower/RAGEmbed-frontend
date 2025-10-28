@@ -32,7 +32,7 @@ class ChatState {
             }
         }
         catch (error) {
-            this.messages.push({ type: "text", sender: "bot", data: JSON.stringify(error)})
+            this.messages.push({ type: "text", sender: "bot", data: error.message})
         }
     }
 }
