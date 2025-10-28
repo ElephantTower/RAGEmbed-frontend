@@ -5,7 +5,7 @@ import Api from "../data/Api.js"
 class ChatState {
     #api = new Api()
 
-    messages = $state([{ type: "link", sender: "bot", data: {title: "Arxiv", link: "https://arxiv.org/", distance: 0.2345872} }])
+    messages = $state([])
 
     input = $state("")
     model_name = $state(ModelName.Nomic)
