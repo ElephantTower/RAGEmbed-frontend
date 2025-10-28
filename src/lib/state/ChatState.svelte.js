@@ -8,7 +8,7 @@ class ChatState {
     messages = $state([])
 
     input = $state("")
-    model_name = $state(ModelName.ModelName)
+    model_name = $state(ModelName.Nomic)
     metric = $state(Metric.Cosine)
     length = $state(5)
 

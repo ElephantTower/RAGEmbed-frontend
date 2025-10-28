@@ -4,7 +4,7 @@ export default class Api {
     }
 
     async send(data) {
-        const url = `${this.baseURL}/findSimmilar`
+        const url = `${this.baseURL}/findSimilar`
         const response = await fetch(url, {
             method: 'POST',
             headers: {
