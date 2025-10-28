@@ -15,9 +15,6 @@ class ChatState {
     async send() {
         console.log($state.snapshot(this.messages))
         this.messages.push({ type: "text", sender: "user", data: this.input })
-        console.log(this.input)
-        this.input = ""
-        console.log(this.input)
 
         try {
             const results = await this.#api.send({
