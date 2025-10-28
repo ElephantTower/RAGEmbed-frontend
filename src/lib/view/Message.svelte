@@ -7,7 +7,7 @@
     <div class="message-bubble">
         {#if type == "text"}
             <p class="message-content">{data}</p>
-        {:else if (type = "")}
+        {:else if (type == "link")}
             <a href={data.link}>{data.title} {data.distance}</a>
         {/if}
     </div>
