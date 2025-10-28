@@ -1,11 +1,12 @@
 export default class Api {
-    constructor(baseURL = 'http://localhost:3000/rag') {
+    constructor(baseURL = 'http://localhost:80/api/rag') {
         this.baseURL = baseURL;
     }
 
     async send(data) {
         const url = `${this.baseURL}/findSimmilar`
         const response = await fetch(url, {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
