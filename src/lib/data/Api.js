@@ -1,5 +1,5 @@
 export default class Api {
-    constructor(baseURL = 'http://localhost:80/api/rag') {
+    constructor(baseURL = `${window.location.href}/api/rag`) {
         this.baseURL = baseURL;
     }
 
