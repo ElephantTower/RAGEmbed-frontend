@@ -1,12 +1,20 @@
-<!-- ChatMessage.svelte -->
+ChatMessage.svelte
 <script>
+    import SvelteMarkdown from "@humanspeak/svelte-markdown";
+
     let { type, sender, data } = $props();
 </script>
 
 <div class="message {sender}">
     <div class="message-bubble">
         {#if type == "text"}
-            <p class="message-content">{data}</p>
+            <p class="message-content">
+                {#if sender == "user"}
+                {data}
+                {:else if sender == "bot"}
+                <SvelteMarkdown source={data}/>
+                {/if}
+            </p>
         {:else if (type == "link")}
             <a href={data.link}>{data.title} </a>
             <p>Distance: {data.distance}</p>
