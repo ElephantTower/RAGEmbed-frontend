@@ -1,7 +1,7 @@
 import { fetchEventSource } from '@microsoft/fetch-event-source';
 
 export default class Api {
-  constructor(baseURL = `${window.location.origin}/rag`) {
+  constructor(baseURL = `${window.location.origin}/api/rag`) {
     this.baseURL = baseURL;
   }
 
@@ -80,7 +80,6 @@ export default class Api {
         },
         onerror(err) {
           onError(err);
-          // allow library to retry by not throwing
         },
         onclose() {
           onClose();

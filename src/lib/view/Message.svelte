@@ -1,4 +1,3 @@
-ChatMessage.svelte
 <script>
     import SvelteMarkdown from "@humanspeak/svelte-markdown";
 
