@@ -1,9 +1,11 @@
-export default class Api {
-    constructor(baseURL = `${window.location.href}/api/rag`) {
-        this.baseURL = baseURL;
-    }
+import { fetchEventSource } from '@microsoft/fetch-event-source';
 
-    async send(data) {
+export default class Api {
+  constructor(baseURL = `${window.location.origin}/rag`) {
+    this.baseURL = baseURL;
+  }
+
+  async findSimilar(data) {
         const url = `${this.baseURL}/findSimilar`
         const response = await fetch(url, {
             method: 'POST',
@@ -22,4 +24,86 @@ export default class Api {
         const results = await response.json();
         return results;
     }
+
+  // send non-stream (POST /rag/sendMessage without stream)
+  async send(data) {
+    const url = `${this.baseURL}/sendMessage`;
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...data, stream: false }),
+    });
+
+    if (!res.ok) {
+      const text = await res.text().catch(() => '');
+      throw new Error(`HTTP ${res.status} ${res.statusText} ${text}`);
+    }
+
+    return res.json();
+  }
+
+  // streamMessage: POST /rag/sendMessage with stream: true using fetchEventSource
+  // options: { onToken, onDone, onError, onOpen, signal, onClose }
+  async streamMessage(data, options = {}) {
+    const url = `${this.baseURL}/sendMessage`;
+    const body = { ...data, stream: true };
+    const {
+      onToken = () => {},
+      onDone = () => {},
+      onError = () => {},
+      onOpen = () => {},
+      signal = undefined,
+      onClose = () => {},
+    } = options;
+
+    try {
+      await fetchEventSource(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+        signal,
+        async onopen(response) {
+          await Promise.resolve(onOpen(response));
+          if (!response.ok) {
+            const err = new Error(`HTTP ${response.status}`);
+            onError(err);
+            throw err;
+          }
+        },
+        onmessage(event) {
+          let payload;
+          try { payload = JSON.parse(event.data); } catch { return; }
+
+          if (payload.token) onToken(payload.token);
+          if (payload.done) onDone();
+          if (payload.error) onError(new Error(String(payload.error)));
+        },
+        onerror(err) {
+          onError(err);
+          // allow library to retry by not throwing
+        },
+        onclose() {
+          onClose();
+        },
+      });
+    } catch (err) {
+      onError(err);
+      throw err;
+    }
+  }
+
+  // GET /rag/getHistory
+  async getHistory() {
+    const url = `${this.baseURL}/getHistory`;
+    const res = await fetch(url, { method: 'GET' });
+    if (!res.ok) {
+      const text = await res.text().catch(() => '');
+      throw new Error(`HTTP ${res.status} ${res.statusText} ${text}`);
+    }
+    return res.json();
+  }
+
+  createController() {
+    return new AbortController();
+  }
 }
