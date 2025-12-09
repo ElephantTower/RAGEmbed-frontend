@@ -3,6 +3,11 @@
   import chatState from "./lib/state/ChatState.svelte";
   import SettingsModal from "./lib/view/SettingsModal.svelte";
   import Message from "./lib/view/Message.svelte";
+  import { onMount } from "svelte";
+
+  onMount(()=> {
+    chatState.getHistory();
+  })
 
   let showModal = $state(false);
 
@@ -33,8 +38,9 @@
   <SettingsModal
     bind:showModal
     bind:metric={chatState.metric}
-    bind:modelName={chatState.model_name}
-    bind:length={chatState.length}
+    bind:topChunks={chatState.topChunks}
+    bind:topDocuments={chatState.topDocuments}
+    bind:stream={chatState.stream}
   ></SettingsModal>
 
   <InputArea
@@ -43,6 +49,7 @@
     onClickSettings={() => {
       showModal = true;
     }}
+    isStreaming={chatState.isStreaming}
   ></InputArea>
 </main>
 
@@ -74,7 +81,6 @@
     flex-shrink: 0;
   }
 
-  /* Стили для скроллбара (опционально) */
   .dialog::-webkit-scrollbar {
     width: 6px;
   }

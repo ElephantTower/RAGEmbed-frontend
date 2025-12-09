@@ -1,9 +1,14 @@
 <script>
-    import sendSvg from '../../assets/send.svg'
-    import settingsSvg from '../../assets/settings.svg'
+    import sendSvg from "../../assets/send.svg";
+    import settingsSvg from "../../assets/settings.svg";
 
-    let { value = $bindable(), onClickSettings, onClickSend} = $props();
-    
+    let {
+        value = $bindable(),
+        onClickSettings,
+        onClickSend,
+        isStreaming,
+    } = $props();
+
     let textarea;
     let maxHeight = 120;
 
@@ -41,8 +46,19 @@
             <button class="send-button" onclick={onClickSettings}>
                 <img height="20px" src={settingsSvg} alt="Star icon" />
             </button>
-            <button class="send-button" onclick={onClickSend}>
-                <img height="20px" src={sendSvg} alt="Star icon" />
+            <button
+                class="send-button"
+                onclick={() => {
+                    if (!isStreaming) {
+                        onClickSend();
+                    }
+                }}
+            >
+                {#if isStreaming}
+                    <span class="loader"></span>
+                {:else}
+                    <img height="20px" src={sendSvg} alt="Star icon" />
+                {/if}
             </button>
         </div>
     </div>
@@ -105,5 +121,39 @@
 
     .send-button:hover {
         background-color: var(--orange-dark);
+    }
+
+    .loader {
+        width: 20px;
+        height: 20px;
+        display: inline-block;
+        position: relative;
+    }
+    .loader::after,
+    .loader::before {
+        content: "";
+        box-sizing: border-box;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2px solid #fff;
+        position: absolute;
+        left: 0;
+        top: 0;
+        animation: animloader 2s linear infinite;
+    }
+    .loader::after {
+        animation-delay: 1s;
+    }
+
+    @keyframes animloader {
+        0% {
+            transform: scale(0);
+            opacity: 1;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 0;
+        }
     }
 </style>

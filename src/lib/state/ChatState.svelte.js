@@ -8,27 +8,37 @@ class ChatState {
 
   messages = $state([]);
   input = $state("");
-  model_name = $state(ModelName.Nomic);
   metric = $state(Metric.Cosine);
-  length = $state(5);
-  streaming = $state(false);
+  topChunks = $state(50);
+  topDocuments = $state(2);
+  stream = $state(true);
 
-  async send({ stream = false } = {}) {
+  isStreaming = $state(false);
+  
+
+
+  async send() {
+    if (this.input == "") {
+      return
+    }
+
     this.messages.push({ type: "text", sender: "user", data: this.input });
     const curInput = this.input;
     this.input = "";
 
-    if (!stream) {
+    console.log($state.snapshot(this.stream));
+
+    if (!this.stream) {
       try {
         const result = await this.#api.send({
           input: curInput,
           metric: this.metric,
-          topChunks: this.length,
-          topDocuments: 2,
+          topChunks: this.topChunks,
+          topDocuments: this.topDocuments,
         });
 
-        this.messages.push({ type: "text", sender: "bot", data: result.content});
-        
+        this.messages.push({ type: "text", sender: "bot", data: result.answer });
+
       } catch (error) {
         this.messages.push({ type: "text", sender: "bot", data: error?.message ?? String(error) });
       }
@@ -39,7 +49,7 @@ class ChatState {
     this.messages.push(botMsg);
     const botIndex = $state.snapshot(this.messages).length - 1;
 
-    this.streaming = true;
+    this.isStreaming = true;
     this.#controller = this.#api.createController();
 
     try {
@@ -47,8 +57,8 @@ class ChatState {
         {
           input: curInput,
           metric: this.metric,
-          topChunks: this.length,
-          topDocuments: 2,
+          topChunks: this.topChunks,
+          topDocuments: this.topDocuments,
         },
         {
           signal: this.#controller.signal,
@@ -57,24 +67,22 @@ class ChatState {
             // await Promise.resolve(); // keep as async to match signature
           },
           onToken: (token) => {
-            // append token to temporary bot message
             this.messages[botIndex].data += token;
           },
           onDone: () => {
-            this.streaming = false;
-            // stream finished; messages[botIndex] contains final assistant text
+            this.isStreaming = false;
           },
           onError: (err) => {
-            this.streaming = false;
+            this.isStreaming = false;
             this.messages.push({ type: "text", sender: "bot", data: err?.message ?? String(err) });
           },
           onClose: () => {
-            this.streaming = false;
+            this.isStreaming = false;
           },
         }
       );
     } catch (err) {
-      this.streaming = false;
+      this.isStreaming = false;
       this.messages.push({ type: "text", sender: "bot", data: err?.message ?? String(err) });
     } finally {
       this.#controller = null;
@@ -85,13 +93,14 @@ class ChatState {
     if (this.#controller) {
       this.#controller.abort();
       this.#controller = null;
-      this.streaming = false;
+      this.isStreaming = false;
     }
   }
 
-  async refreshHistory() {
+  async getHistory() {
     try {
       const history = await this.#api.getHistory();
+      console.log(history)
       this.messages = history.map(m => ({
         type: 'text',
         sender: m.role === 'assistant' ? 'bot' : 'user',

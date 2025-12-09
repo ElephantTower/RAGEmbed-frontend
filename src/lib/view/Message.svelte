@@ -9,12 +9,12 @@
         {#if type == "text"}
             <p class="message-content">
                 {#if sender == "user"}
-                {data}
+                    {data}
                 {:else if sender == "bot"}
-                <SvelteMarkdown source={data}/>
+                    <SvelteMarkdown source={data} />
                 {/if}
             </p>
-        {:else if (type == "link")}
+        {:else if type == "link"}
             <a href={data.link}>{data.title} </a>
             <p>Distance: {data.distance}</p>
         {/if}
@@ -23,11 +23,11 @@
 
 <style>
     a {
-        color: var(--text-inverse)
+        color: var(--text-inverse);
     }
 
     a:visited {
-        color: var(--text-inverse)
+        color: var(--text-inverse);
     }
 
     .message {
@@ -100,4 +100,5 @@
             transform: translateY(0) scale(1);
         }
     }
+
 </style>

@@ -25,7 +25,6 @@ export default class Api {
         return results;
     }
 
-  // send non-stream (POST /rag/sendMessage without stream)
   async send(data) {
     const url = `${this.baseURL}/sendMessage`;
     const res = await fetch(url, {
@@ -42,8 +41,6 @@ export default class Api {
     return res.json();
   }
 
-  // streamMessage: POST /rag/sendMessage with stream: true using fetchEventSource
-  // options: { onToken, onDone, onError, onOpen, signal, onClose }
   async streamMessage(data, options = {}) {
     const url = `${this.baseURL}/sendMessage`;
     const body = { ...data, stream: true };
@@ -90,8 +87,7 @@ export default class Api {
       throw err;
     }
   }
-
-  // GET /rag/getHistory
+  
   async getHistory() {
     const url = `${this.baseURL}/getHistory`;
     const res = await fetch(url, { method: 'GET' });

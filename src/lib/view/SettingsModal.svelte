@@ -3,8 +3,14 @@
     import ModelName from "../data/ModelName";
     import Modal from "./Modal.svelte";
 
-    let {showModal = $bindable(), length= $bindable(), metric= $bindable(), modelName= $bindable()} = $props()
-
+    let {
+        showModal = $bindable(),
+        topChunks = $bindable(),
+        topDocuments = $bindable(),
+        stream = $bindable(),
+        metric = $bindable(),
+        modelName = $bindable(),
+    } = $props();
 
 </script>
 
@@ -44,7 +50,21 @@
     </div>
 
     <label>
-        <input type="range" bind:value={length} min={1} max={15} />
-        {length}
+        <input type="range" bind:value={topChunks} min={1} max={50} />
+        {topChunks}
+    </label>
+
+    <label>
+        <input type="range" bind:value={topChunks} min={1} max={50} />
+        {topChunks}
+    </label>
+
+    <label>
+        <input type="range" bind:value={topDocuments} min={1} max={50} />
+        {topDocuments}
+    </label>
+
+    <label>
+        <input type="checkbox" bind:checked={stream} />
     </label>
 </Modal>
