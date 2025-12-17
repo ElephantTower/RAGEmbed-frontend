@@ -1,6 +1,7 @@
 import ModelName from "../data/ModelName.js";
 import Metric from "../data/Metric.js";
 import Api from "../data/Api.js";
+import { deleteCookie } from "svelte-cookie";
 
 class ChatState {
   #api = new Api();
@@ -15,7 +16,9 @@ class ChatState {
 
   isStreaming = $state(false);
   
-
+  deleteCookies() {
+    deleteCookie("token")
+  }
 
   async send() {
     if (this.input == "") {
