@@ -9,9 +9,7 @@
         topDocuments = $bindable(),
         stream = $bindable(),
         metric = $bindable(),
-        modelName = $bindable(),
     } = $props();
-
 </script>
 
 <Modal bind:showModal>
@@ -33,38 +31,22 @@
                 </label>
             {/each}
         </div>
-
-        <div class="vertical-container">
-            {#each Object.values(ModelName) as curModelName}
-                <label>
-                    <input
-                        type="radio"
-                        name="model name"
-                        value={curModelName}
-                        bind:group={modelName}
-                    />
-                    {curModelName}
-                </label>
-            {/each}
-        </div>
     </div>
 
-    <label>
+    <div class="horizontal-container">
+        <p>Top chunks</p>
         <input type="range" bind:value={topChunks} min={1} max={50} />
-        {topChunks}
-    </label>
+        <p>{topChunks}</p>
+    </div>
 
-    <label>
-        <input type="range" bind:value={topChunks} min={1} max={50} />
-        {topChunks}
-    </label>
-
-    <label>
+    <div class="horizontal-container">
+        <p>Top documents</p>
         <input type="range" bind:value={topDocuments} min={1} max={50} />
-        {topDocuments}
-    </label>
+        <p>{topDocuments}</p>
+    </div>
 
-    <label>
+    <div class="horizontal-container">
+        <p>Stream</p>
         <input type="checkbox" bind:checked={stream} />
-    </label>
+    </div>
 </Modal>

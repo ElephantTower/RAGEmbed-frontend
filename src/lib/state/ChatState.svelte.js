@@ -18,6 +18,7 @@ class ChatState {
   
   deleteCookies() {
     deleteCookie("token")
+    window.location.reload();
   }
 
   async send() {
